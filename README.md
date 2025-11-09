@@ -1,0 +1,25 @@
+### CtoU (Chicken to Unicorn) : 동물 키우기 시뮬레이터
+### 프로젝트 구조
+
+- mainSystem (실행 부분)
+    - controller (실제 게임 실행)
+    - gameEXE (코드 시작점, 컨트롤러 호출)
+- Entity (엔티티 정의 패키지)
+    - livestock (가축)
+    - product (생산품)
+    - farm (사육장)
+    - shop(상점)service (농장, 상점 기능 패키지)
+    - currentFarm ( 현재 사육장 상태 : 구매 또는 판매 시 이 클래스가 바뀜 )
+    - enums (enum 형 자료형 선언)
+- managementSystem( 농장 관리, 상점 기능 패키지)
+    - farmSystem (농장 관리 기능)
+        - showAnimalStatus ( 현재 보유중인 동물들 상태 조회 )
+        - feedAnimal (사료 주기 )
+        - farmAnimalProduce( 수확 하기 )
+    - marketSystem (상점 기능)
+        - processBuy(구매,돈 차감)
+        - processSell(판매,돈 추가)
+        - processExpand(확장,돈 차감)
+        - getSellableProducts(판매가능한 전체목록)
+        - getAvailableItems(구매 가능한 전체목록)
+        - economyService
