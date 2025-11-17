@@ -7,7 +7,7 @@
 - Entity (엔티티 정의 패키지)
     - livestock (가축)
     - product (생산품)
-    - farm (사육장)
+    - farmSystem (사육장)
     - shop(상점)service (농장, 상점 기능 패키지)
     - currentFarm ( 현재 사육장 상태 : 구매 또는 판매 시 이 클래스가 바뀜 )
     - enums (enum 형 자료형 선언)

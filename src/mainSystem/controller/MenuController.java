@@ -4,6 +4,7 @@ import Entity.enums.MenuState;
 import managementSystem.farmSystem.*;
 import managementSystem.marketSystem.*;
 import java.util.Scanner;
+import farmSystem.Farm;
 
 public class MenuController {
 
@@ -82,7 +83,7 @@ public class MenuController {
 
         switch (choice) {
             case 1:
-                statusSystem.showAnimalStatus();
+                statusSystem.AnimalsStatus();
             case 2:
                 feedSystem.feedAllAnimals();
             case 3:

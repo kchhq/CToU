@@ -1,11 +1,12 @@
-package market;
+package marketSystem;
 
-import farm.Farm;
-import farm.Finance;
-import farm.Product;
+import farmSystem.Farm;
+import farmSystem.Finance;
+import farmSystem.Product;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import common.enums.ItemType;
 
 
 public class ShopService {
@@ -14,14 +15,6 @@ public class ShopService {
     // 1. 상수 및 Enum 정의
     // ----------------------------------------------------
     private static final int MAX_ENCLOSURE_LEVEL = 5;
-
-    public enum ItemType {
-        ANIMAL,
-        FEED,
-        FACILITY,
-        NOT_FOUND,
-        UNPURCHASABLE
-    }
 
     public static class ItemPurchaseInfo {
         public final ItemType type;
@@ -46,11 +39,11 @@ public class ShopService {
     public static final Map<String, Integer> ANIMAL_PRICES;
     static {
         Map<String, Integer> aMap = new HashMap<>();
-        aMap.put("닭", 50);
-        aMap.put("양", 100);
-        aMap.put("소", 200);
-        aMap.put("사슴", 150);
-        aMap.put("유니콘",3000);
+        aMap.put("Chicken", 50);
+        aMap.put("Sheep", 100);
+        aMap.put("Cow", 200);
+        aMap.put("Deer", 150);
+        aMap.put("Unicorn",3000);
         ANIMAL_PRICES = Collections.unmodifiableMap(aMap);
     }
 
@@ -127,7 +120,7 @@ public class ShopService {
      */
     public static void sellProducts(Finance finance, Farm farm) {
         int totalRevenue = 0;
-        Product inventory = farm.getProductInventory();
+        Product product = farm.getProductInventory();
 
         System.out.println("\n===== 생산물 판매 시작 =====");
 
@@ -136,21 +129,21 @@ public class ShopService {
 
             // 재고 수량 조회 및 제거 로직 분리
             switch (item) {
-                case "양털":
-                    count = inventory.getWoolCount();
-                    if (count > 0) inventory.removeWool(count);
+                case "Wool":
+                    count = product.getWoolCount();
+                    if (count > 0) product.removeWool(count);
                     break;
-                case "계란":
-                    count = inventory.getEggCount();
-                    if (count > 0) inventory.removeEggs(count);
+                case "Egg":
+                    count = product.getEggCount();
+                    if (count > 0) product.removeEggs(count);
                     break;
-                case "우유":
-                    count = inventory.getMilkCount();
-                    if (count > 0) inventory.removeMilk(count);
+                case "Milk":
+                    count = product.getMilkCount();
+                    if (count > 0) product.removeMilk(count);
                     break;
-                case "뿔":
-                    count = inventory.getAntlerCount();
-                    if (count > 0) inventory.removeAntlers(count);
+                case "Antler":
+                    count = product.getAntlerCount();
+                    if (count > 0) product.removeAntlers(count);
                     break;
             }
 
