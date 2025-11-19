@@ -1,8 +1,8 @@
-package farmSystem.service;
+package managementSystem.farmSystem.service;
 
 import Entity.livestock.Deer;
 import Entity.livestock.Livestock;
-import farmSystem.Product;
+import managementSystem.farmSystem.Product;
 
 public class DeerService {
 

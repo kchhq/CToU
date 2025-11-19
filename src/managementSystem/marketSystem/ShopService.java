@@ -1,12 +1,12 @@
-package marketSystem;
+package managementSystem.marketSystem;
 
-import farmSystem.Farm;
-import farmSystem.Finance;
-import farmSystem.Product;
+import managementSystem.farmSystem.Farm;
+import managementSystem.farmSystem.Finance;
+import managementSystem.farmSystem.Product;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import common.enums.ItemType;
+import Entity.enums.ItemType;
 
 
 public class ShopService {

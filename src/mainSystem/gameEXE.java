@@ -1,8 +1,8 @@
 package mainSystem;
 
 
-import farmSystem.Farm;
-import farmSystem.Finance;
+import managementSystem.farmSystem.Farm;
+import managementSystem.farmSystem.Finance;
 // import Entity.enums.MenuState;
 
 public class gameEXE {

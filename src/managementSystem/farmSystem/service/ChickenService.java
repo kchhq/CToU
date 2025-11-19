@@ -1,8 +1,8 @@
-package farmSystem.service; // 패키지 이름을 farmSystem으로 변경
+package managementSystem.farmSystem.service; // 패키지 이름을 farmSystem으로 변경
 
 import Entity.livestock.Chicken;
 import Entity.livestock.Livestock; // MAX_HP 상수 참조를 위해 import 필요
-import farmSystem.Product; // 💡 Product 클래스 import
+import managementSystem.farmSystem.Product; // 💡 Product 클래스 import
 
 public class ChickenService {
 

@@ -1,4 +1,4 @@
-package common.enums;
+package Entity.enums;
 
 public enum MenuState {
     MAIN,

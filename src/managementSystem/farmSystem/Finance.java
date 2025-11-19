@@ -1,4 +1,4 @@
-package farmSystem;
+package managementSystem.farmSystem;
 
 
 public class Finance {
