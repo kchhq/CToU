@@ -1,4 +1,4 @@
-package managementSystem.farmSystem;
+package farmSystem;
 
 public class Product {
 

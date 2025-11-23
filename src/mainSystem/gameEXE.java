@@ -1,9 +1,8 @@
 package mainSystem;
 
-
-import managementSystem.farmSystem.Farm;
-import managementSystem.farmSystem.Finance;
-// import Entity.enums.MenuState;
+import farmSystem.Farm;
+import farmSystem.Finance;
+import mainSystem.controller.MenuController;
 
 public class gameEXE {
     public static void main(String[] args) {
@@ -13,15 +12,12 @@ public class gameEXE {
                 동물을 키우고 수익을 내 빚을 갚아보세요.
                 """);
 
-        // 1. 핵심 객체 초기화 (Farm과 Finance)
-        Farm farm = new Farm(); // Farm 객체 생성 (닭 한 마리로 시작, 사육장 레벨 1)
-        Finance finance = new Finance(farm, 500); // Finance 객체 생성 (Farm 연결, 초기 자금 500원)
-
-        // 2. 컨트롤러 실행
+        Farm farm = new Farm();
+        Finance finance = new Finance(farm, 500); // 네 Finance 생성자에 맞게
 
         MenuController controller = new MenuController(farm, finance);
         controller.start();
 
-        System.out.println("게임이 종료되었습니다. ");
+        System.out.println("게임이 종료되었습니다.");
     }
 }

@@ -1,4 +1,4 @@
-package managementSystem.farmSystem;
+package farmSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,10 @@ public class Farm {
     // 💡 사육장 규칙 관련 상수
     private static final int MAX_ENCLOSURE_LEVEL = 5;
 
+    // 현재 사육장 가축 리스트
     private final List<Livestock> animals;
+
+    private final Product productInventory;
 
     // 사육장 시설 관련 필드
     private int enclosureLevel;
@@ -19,6 +22,7 @@ public class Farm {
     /** Farm 생성자: 가축 리스트와 사육장 레벨을 초기화 */
     public Farm() {
         this.animals = new ArrayList<>();
+        this.productInventory = new Product();
 
         // 사육장 레벨 및 수용량 초기화 (레벨 1 = 수용량 1)
         this.enclosureLevel = 1;
@@ -83,6 +87,11 @@ public class Farm {
     /** 현재 사육장의 최대 수용량을 반환합니다. */
     public int getMaxCapacity() {
         return maxCapacity;
+    }
+
+    // 인벤토리 getter
+    public Product getProductInventory() {
+        return productInventory;
     }
 
     // ----------------------------------------------------
