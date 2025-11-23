@@ -191,7 +191,7 @@ public class MenuController {
         System.out.print("선택 : ");
         int choice = getChoice();
 
-        String animalKey = null;
+        String animalKey;
         switch (choice) {
             case 1 -> animalKey = "Chicken";
             case 2 -> animalKey = "Sheep";
