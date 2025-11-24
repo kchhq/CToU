@@ -7,6 +7,11 @@ public abstract class Livestock {
 
     public static final int MAX_HP = 100;
 
+    // 오늘 상호작용 했는지 여부
+    private boolean interactedToday = false;
+    // 오늘 사료를 줬는지 여부
+    private boolean fedToday = false;
+
     protected Livestock(String name, String type){
         this.name = name;
         this.type = type;
@@ -21,16 +26,22 @@ public abstract class Livestock {
 
     // 밥주기 : 사료량만큼 HP를 회복시킵니다.
     public void feed(){
-        int amount = getFeedAmount(); // 각 동물의 사료량(회복량)을 가져옵니다.
+        if(fedToday){
+            System.out.println("동물이 배가 부른지 사료를 먹지 않습니다.");
+            return;
+        } else {
+            int amount = getFeedAmount(); // 각 동물의 사료량(회복량)을 가져옵니다.
 
-        // HP 회복 계산: HP를 amount만큼 더하되, MAX_HP를 초과할 수 없습니다.
-        int oldHp = this.hp;
-        this.hp = Math.min(MAX_HP, this.hp + amount);
+            // HP 회복 계산: HP를 amount만큼 더하되, MAX_HP를 초과할 수 없습니다.
+            int oldHp = this.hp;
+            this.hp = Math.min(MAX_HP, this.hp + amount);
 
-        // 실제로 회복된 HP 양 계산
-        int recoveredHp = this.hp - oldHp;
+            // 실제로 회복된 HP 양 계산
+            int recoveredHp = this.hp - oldHp;
 
-        System.out.println(name +" 에게 밥을 주었습니다. HP가 " + recoveredHp + "만큼 회복하여 현재 HP는 " + hp + "이(가) 되었습니다.");
+            System.out.println(name + " 에게 밥을 주었습니다. HP가 " + recoveredHp + "만큼 회복하여 현재 HP는 " + hp + "이(가) 되었습니다.");
+            setFedToday(true);
+        }
     }
 
 
@@ -59,9 +70,28 @@ public abstract class Livestock {
      * 상호작용 가능 여부를 판단하는 공통 로직입니다.
      * @return HP가 maxHp와 같으면 true, 아니면 false
      */
+    // 오늘 상호작용을 하지 않았고 HP가 MAX이면 상호작용이 가능
     public boolean isReadyForInteraction() {
-        return this.hp == this.MAX_HP;
+        return !interactedToday && this.hp == this.MAX_HP;
     }
+
+    // 오늘 상호작용 여부 getter : service에서 쓰임
+    public boolean getInteractedToday() {
+        return interactedToday;
+    }
+    // 오늘 상호작용 여부 setter : Nextday()에서 쓰임
+    public void setInteractedToday(boolean interactedToday) {
+        this.interactedToday = interactedToday;
+    }
+    // 오늘 사료 급여 여부 getter
+    public boolean getFedToday() {
+        return fedToday;
+    }
+    // 오늘 사료 급여 여부 setter
+    public void setFedToday(boolean fedToday) {
+        this.fedToday = fedToday;
+    }
+
 
     public String getName() { return name; }
     public int getHp() { return hp; }

@@ -1,17 +1,21 @@
 package farmSystem;
 
+import java.sql.SQLOutput;
+
 public class Product {
 
     private int antlerCount;
     private int woolCount;
     private int milkCount;
     private int eggCount;
+    private int feedstuffCount;
 
     public Product() {
         this.woolCount = 0;
         this.milkCount = 0;
         this.eggCount = 0;
         this.antlerCount = 0;
+        this.feedstuffCount = 0;
     }
 
     // ------------------------------------
@@ -24,21 +28,26 @@ public class Product {
         this.antlerCount += count;
         System.out.println("📦 창고에 뿔 " + count + "개 추가.");
     }
-
+    // 양털 추가
     public void addWool(int count) {
         this.woolCount += count;
         System.out.println("📦 창고에 양털 " + count + "개 추가.");
     }
-
+    // 우유 추가
     public void addMilk(int count) {
         this.milkCount += count;
         System.out.println("📦 창고에 우유 " + count + "L 추가.");
     }
-
+    // 계란 추가
     public void addEggs(int count) {
         this.eggCount += count;
         System.out.println("📦 창고에 알 " + count + "개 추가.");
     }
+    /* public void addUnicontSomething(int count) {
+        this.Something += count;
+        System.out.println("📦 창고에 Something" + count + "개 추가.");
+    } */ // 유니콘 상호작용 추가 시 사용 임시로 수확물을 Something으로 지정해둠
+    // 사료 추가
 
     // ------------------------------------
     // 상품 차감 (판매) 메서드
@@ -83,6 +92,16 @@ public class Product {
             System.out.println("❌ 알 재고 부족으로 판매 실패.");
         }
     }
+    /*
+     Something 재고를 요청 수량만큼 차감
+    public void removeSomething(int count) {
+        if (this.SomethingCount >= count) {
+            this.SomethingCount -= count;
+            System.out.printf(" 창고에서 [Something] %d개 판매.%n", count);
+        } else {
+            System.out.println("❌ Something 재고 부족으로 판매 실패.");
+        }
+    } */
 
     // ------------------------------------
     // Getter 및 상태 표시
@@ -93,6 +112,7 @@ public class Product {
     public int getMilkCount() { return milkCount; }
     public int getEggCount() { return eggCount; }
     public int getAntlerCount() { return antlerCount; }
+    // public int getSomethingCount() { return SomethingCount; }
 
     public void displayAllProducts() {
         System.out.println("\n--- 🧺 현재 제품 창고 ---");
@@ -100,6 +120,7 @@ public class Product {
         System.out.println("양털: " + woolCount + "개");
         System.out.println("우유: " + milkCount + "L");
         System.out.println("알: " + eggCount + "개");
+        // System.out.println("Something: " + somethingCount + "개");
         System.out.println("------------------------");
     }
 

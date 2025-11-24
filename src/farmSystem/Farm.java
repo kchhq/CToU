@@ -45,12 +45,12 @@ public class Farm {
         }
     }
 
-    /** 외부(구매 시스템)에서 구매 확정 후 호출하여 가축 객체를 사육장에 추가 */
+    /* 외부(구매 시스템)에서 구매 확정 후 호출하여 가축 객체를 사육장에 추가
     public void addPurchasedAnimal(Livestock newAnimal) {
         if (newAnimal != null) {
             addAnimal(newAnimal);
         }
-    }
+    } */ // MenuController의 BuyAnimal()로 대체함
 
     // ----------------------------------------------------
     // 2. 사육장 확장 기능 (레벨 5까지 제한)

@@ -10,7 +10,7 @@ public class Finance {
     public Finance(Farm farm, int startMoney) {
         this.farm = farm;
         this.money = startMoney;
-        System.out.println("재무 시스템 시작. 현재 돈: " + this.money + "원");
+        System.out.println("현재 돈: " + this.money + "원");
     }
 
     /** 현재 자금을 반환 */

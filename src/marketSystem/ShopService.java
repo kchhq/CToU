@@ -67,10 +67,10 @@ public class ShopService {
     public static final Map<String, Integer> SELL_PRICES;
     static {
         Map<String, Integer> sMap = new HashMap<>();
-        sMap.put("양털", 15);
-        sMap.put("계란", 3);
-        sMap.put("우유", 5);
-        sMap.put("뿔", 120);
+        sMap.put("Wool", 15);
+        sMap.put("Egg", 3);
+        sMap.put("Milk", 5);
+        sMap.put("Antler", 120);
         SELL_PRICES = Collections.unmodifiableMap(sMap);
     }
 
