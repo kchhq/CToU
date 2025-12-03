@@ -1,4 +1,4 @@
-### CtoU (Chicken to Unicorn) : 동물 키우기 시뮬레이터
+### CtoU (Chicken to Unicorn) : 목장 시뮬레이터
 ### 프로젝트 구조
 
 - mainSystem (실행 부분)
