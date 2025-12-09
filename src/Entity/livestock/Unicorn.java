@@ -1,5 +1,7 @@
 package Entity.livestock;
 
+import common.enums.PreferredFeed;
+
 public class Unicorn extends Livestock {
 
     public Unicorn(String name, String type) {
@@ -10,4 +12,9 @@ public class Unicorn extends Livestock {
     protected int getFeedAmount(){
         return 30;
     }
+    @Override
+    public PreferredFeed getPreferredFeed() {
+        return PreferredFeed.UNICORN;
+    }
+
 }

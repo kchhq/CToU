@@ -1,5 +1,7 @@
 package Entity.livestock;
 
+import common.enums.PreferredFeed;
+
 public class Sheep extends Livestock {
 
     public Sheep(String name) {
@@ -11,4 +13,8 @@ public class Sheep extends Livestock {
         return 40;
     }
 
+    @Override
+    public PreferredFeed getPreferredFeed() {
+        return PreferredFeed.SHEEP;
+    }
 }

@@ -1,5 +1,7 @@
 package Entity.livestock;
 
+import common.enums.PreferredFeed;
+
 public abstract class Livestock {
     private String name;
     private String type;
@@ -95,4 +97,7 @@ public abstract class Livestock {
 
     public String getName() { return name; }
     public int getHp() { return hp; }
+
+    public abstract PreferredFeed getPreferredFeed();
+
 }
