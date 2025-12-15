@@ -82,7 +82,7 @@ public abstract class Livestock {
 
     // 🧼 케이지 청소 및 방문 상호작용
     public void cleanAndVisit() {
-        int decreaseAmount = getStressDecreaseAmount(); // **추상 메서드를 호출하여 고유값을 사용**
+        int decreaseAmount = getStressDecreaseAmount();
         decreaseStress(decreaseAmount);
         setInteractedToday(true);
 
