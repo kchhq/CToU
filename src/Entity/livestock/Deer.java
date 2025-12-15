@@ -23,4 +23,14 @@ public class Deer extends Livestock {
     public PreferredFeed getPreferredFeed() {
         return PreferredFeed.DEER;
     }
+    @Override
+    protected int getStressFromUnpreferredFeed() {
+        return 25;
+    }
+
+    @Override
+    protected int getStressDecreaseAmount() {
+        return 40;
+    }
+
 }

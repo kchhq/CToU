@@ -17,4 +17,15 @@ public class Sheep extends Livestock {
     public PreferredFeed getPreferredFeed() {
         return PreferredFeed.SHEEP;
     }
+
+    @Override
+    protected int getStressFromUnpreferredFeed() {
+        return 25;
+    }
+
+    @Override
+    protected int getStressDecreaseAmount() {
+        return 40;
+    }
+
 }

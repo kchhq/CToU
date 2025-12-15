@@ -167,6 +167,8 @@ public class MenuController {
             animal.setInteractedToday(false);
             //오늘 사료 급여 여부를 false로 변경
             animal.setFedToday(false);
+
+            // 🐔 닭 청결도 로직 제거됨.
         }
         System.out.println("\n=== 하루가 지나" + day + "일차가 밝았습니다. ===\n");
         state = MenuState.MAIN;
@@ -182,12 +184,48 @@ public class MenuController {
             return;
         }
 
-        System.out.println("\n[모든 동물에게 사료를 줍니다]");
+        // 1. 사용자에게 급여할 사료 종류를 선택하도록 요청합니다.
+        PreferredFeed selectedFeed = selectFeedType();
+
+        // 사용자가 취소를 선택한 경우
+        if (selectedFeed == null) {
+            System.out.println("사료 주기를 취소합니다.");
+            return;
+        }
+
+        System.out.println("\n[모든 동물에게 사료 (" + selectedFeed.name() + ")를 급여합니다]");
         for (Livestock animal : animals) {
-            animal.feed();  // ★ 여기서 Livestock의 feed() 호출
+            // ★ 수정된 부분: selectedFeed 인수를 전달합니다.
+            animal.feed(selectedFeed);
         }
         System.out.println();
     }
+
+    // 헬퍼 메서드: 사용자에게 사료 종류를 선택하게 함
+    private PreferredFeed selectFeedType() {
+        while (true) {
+            System.out.println("======= 어떤 사료를 주시겠습니까? =======");
+
+            // PreferredFeed Enum의 값들을 출력
+            PreferredFeed[] feeds = PreferredFeed.values();
+            for (int i = 0; i < feeds.length; i++) {
+                System.out.println((i + 1) + ". " + feeds[i].name());
+            }
+            System.out.println((feeds.length + 1) + ". 취소하고 돌아가기");
+
+            System.out.print("선택 : ");
+            int choice = getChoice();
+
+            if (choice > 0 && choice <= feeds.length) {
+                return feeds[choice - 1];
+            } else if (choice == feeds.length + 1) {
+                return null; // 취소
+            } else {
+                System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
+            }
+        }
+    }
+
 
     // 모든 동물 상호작용
     private void interactWithAnimals() {
@@ -203,6 +241,7 @@ public class MenuController {
         System.out.println("\n[동물들과 상호작용을 시도합니다.]");
         for (Livestock animal : animals) {
 
+            // 1. 수확 로직 (각 동물별 서비스 호출)
             if(animal instanceof Chicken chicken) {
                 chickenService.interactHarvestEgg(chicken, inventory);
             } else if (animal instanceof Cow cow) {
@@ -211,9 +250,16 @@ public class MenuController {
                 sheepService.interactShear(sheep, inventory);
             } else if (animal instanceof Deer deer) {
                 deerService.interactCutAntlers(deer, inventory);
-            } /* else if (animal instanceof Unicorn unicorn) {
+            }
+            /* else if (animal instanceof Unicorn unicorn) {
                 unicornService.interactSomething(unicorn, inventory);
             } */ // 유니콘
+
+            // 2. 닭을 포함한 모든 동물에 대한 방문 상호작용 (스트레스 감소)
+            // isReadyForInteraction은 상호작용했는지 여부와 HP MAX 여부를 체크함
+            if (animal.isReadyForInteraction()) {
+                animal.cleanAndVisit(); // 방문 및 돌보기로 스트레스 감소
+            }
         }
         System.out.println();
     }
@@ -317,7 +363,7 @@ public class MenuController {
             case "Sheep"   -> newAnimal = new Sheep(name);
             case "Cow"     -> newAnimal = new Cow(name);
             case "Deer"    -> newAnimal = new Deer(name);
-            case "Unicorn" -> newAnimal = new Unicorn(name, "Unicorn");
+            case "Unicorn" -> newAnimal = new Unicorn(name,"Unicorn");
             default -> {
                 System.out.println("알 수 없는 동물 타입입니다.");
                 finance.addMoney(price); // 예외처리
@@ -376,11 +422,4 @@ public class MenuController {
             finance.addMoney(price);
         }
     }
-
-
-
-
-
 }
-
-

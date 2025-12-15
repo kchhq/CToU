@@ -9,12 +9,23 @@ public class Cow extends Livestock {
     }
 
     @Override
-    protected int getFeedAmount(){
+    protected int getFeedAmount() {
         return 20;
     }
 
     @Override
     public PreferredFeed getPreferredFeed() {
         return PreferredFeed.COW;
+    }
+
+    @Override
+    protected int getStressFromUnpreferredFeed() {
+        return 25;
+    }
+
+
+    @Override
+    protected int getStressDecreaseAmount() {
+        return 40;
     }
 }
