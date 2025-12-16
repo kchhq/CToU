@@ -3,6 +3,9 @@ package mainSystem;
 import farmSystem.Farm;
 import farmSystem.Finance;
 import mainSystem.controller.MenuController;
+import breedingSystem.traits.CommonTrait;
+import breedingSystem.traits.ChickenTrait;
+import Entity.livestock.*;
 
 public class gameEXE {
     public static void main(String[] args) {
@@ -14,7 +17,15 @@ public class gameEXE {
                 """);
 
         Farm farm = new Farm();
-        Finance finance = new Finance(farm, 100); // 초기 자금 100원?
+        Finance finance = new Finance(farm, 10000); // 초기 자금 100원?
+
+        /*
+        // 테스트용: 특성 가진 닭을 시작부터 추가
+        Chicken testChicken = new Chicken("황금알테스트닭");
+        testChicken.setCommonTrait(CommonTrait.LIVELY);           // 공용 특성
+        testChicken.setSpeciesTrait(ChickenTrait.GOLDEN_EGG);     // 닭 전용 특성
+        farm.addAnimal(testChicken);
+        */
 
         MenuController controller = new MenuController(farm, finance);
         controller.start();

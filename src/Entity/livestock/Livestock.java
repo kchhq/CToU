@@ -1,6 +1,7 @@
 package Entity.livestock;
 
 import common.enums.PreferredFeed;
+import breedingSystem.traits.*;
 
 public abstract class Livestock {
     private String name;
@@ -15,12 +16,19 @@ public abstract class Livestock {
     private boolean interactedToday = false;
     // 오늘 사료를 줬는지 여부
     private boolean fedToday = false;
+    // 오늘 청소/방문 했는지 여부
+    private boolean cleanedToday = false;
+
 
     protected Livestock(String name, String type){
         this.name = name;
         this.type = type;
         this.hp = 10;
         this.stressIndex = 0;
+
+        // 기본 특성은 "평범함"
+        this.commonTrait = CommonTrait.NORMAL;
+        this.speciesTrait = null; // 종 특성은 없음
     }
 
     /**
@@ -40,11 +48,11 @@ public abstract class Livestock {
             // **추상 메서드를 호출하여 각 동물의 고유값을 사용합니다.**
             if (feedType != getPreferredFeed()) {
                 increaseStress(getStressFromUnpreferredFeed()); // 비선호 음식: 스트레스 지수 상승
-                System.out.println("🚫 주의! " + name + "에게 선호하지 않는 사료를 주어 스트레스 지수가 상승했습니다. (현재 스트레스: " + this.stressIndex + ")");
+                System.out.println("주의! " + name + "에게 선호하지 않는 사료를 주어 스트레스 지수가 상승했습니다. (현재 스트레스: " + this.stressIndex + ")");
             } else {
                 // 선호 음식: 스트레스 지수 감소 (비선호 감소량의 절반)
                 decreaseStress(getStressDecreaseAmount() / 2);
-                System.out.println("✅ " + name + "에게 선호 사료를 주었습니다. 스트레스 지수가 소폭 감소했습니다. (현재 스트레스: " + this.stressIndex + ")");
+                System.out.println("" + name + "에게 선호 사료를 주었습니다. 스트레스 지수가 소폭 감소했습니다. (현재 스트레스: " + this.stressIndex + ")");
             }
 
             // HP 회복 로직
@@ -81,12 +89,18 @@ public abstract class Livestock {
     }
 
     // 🧼 케이지 청소 및 방문 상호작용
+// 🧼 사육장 청소/방문 : 하루 1회 제한, 상호작용 플래그는 건드리지 않음
     public void cleanAndVisit() {
+        if (cleanedToday) {
+            System.out.println("오늘은 이미 청소를 했습니다.");
+            return;
+        }
+
         int decreaseAmount = getStressDecreaseAmount();
         decreaseStress(decreaseAmount);
-        setInteractedToday(true);
+        cleanedToday = true;
 
-        System.out.println("🤗 " + name + "을(를) 방문하고 사육장을 청소했습니다. 스트레스 지수가 "
+        System.out.println(name + "의 사육장을 청소했습니다. 스트레스 지수가 "
                 + decreaseAmount + "만큼 감소했습니다. (현재 스트레스: " + this.stressIndex + ")");
     }
 
@@ -111,8 +125,17 @@ public abstract class Livestock {
      */
     // 오늘 상호작용을 하지 않았고 HP가 MAX이면 상호작용이 가능
     public boolean isReadyForInteraction() {
-        return !interactedToday && this.hp == this.MAX_HP;
+        if (interactedToday) return false;
+        if (this.hp != MAX_HP) return false;
+
+        // 스트레스 100이면 오늘 상호작용 금지
+        if (this.stressIndex >= MAX_STRESS_INDEX) {
+            return false;
+        }
+        return true;
     }
+
+    public void setCleanedToday(boolean cleanedToday) { this.cleanedToday = cleanedToday; }
 
     // 오늘 상호작용 여부 getter : service에서 쓰임
     public boolean getInteractedToday() {
@@ -130,12 +153,22 @@ public abstract class Livestock {
     public void setFedToday(boolean fedToday) {
         this.fedToday = fedToday;
     }
-
+    public boolean getCleanedToday() { return cleanedToday; }
 
     public String getName() { return name; }
     public int getHp() { return hp; }
     public int getStressIndex() { return stressIndex; }
 
     public abstract PreferredFeed getPreferredFeed();
+
+    // 특성 관련 코드들
+    private Trait commonTrait;  // 특성 없음은 null로 처리할 것
+    private Trait speciesTrait; // 특성 없음은 null로 처리할 것
+
+    public Trait getCommonTrait() { return commonTrait; }
+    public Trait getSpeciesTrait() { return speciesTrait; }
+
+    public void setCommonTrait(Trait t) { this.commonTrait = t; }
+    public void setSpeciesTrait(Trait t) { this.speciesTrait = t; }
 
 }

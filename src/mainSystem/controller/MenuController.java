@@ -11,6 +11,9 @@ import marketSystem.ShopService;
 import farmSystem.Product;
 import java.util.List;
 import java.util.Scanner;
+import breedingSystem.BreedingService;
+import breedingSystem.traits.*;
+
 
 public class MenuController {
 
@@ -28,6 +31,10 @@ public class MenuController {
     // 현재 농장 상태와 자금 상태
     private final Farm farm;
     private final Finance finance;
+
+    // 교배 시스템
+    private final BreedingService breedingService = new BreedingService();
+
 
     // 상호작용을 위해 객체 생성
     private final ChickenService chickenService = new  ChickenService();
@@ -96,9 +103,11 @@ public class MenuController {
                 ======== 농장 ========
                 1. 동물 상태 확인
                 2. 사료 주기
-                3. 수확하기
-                4. 재고 확인
-                5. 돌아가기
+                3. 사육장 청소/방문
+                4. 수확하기
+                5. 재고 확인
+                6. 교배 시도
+                7. 돌아가기
                 """);
 
         System.out.print("선택 : ");
@@ -114,14 +123,22 @@ public class MenuController {
                 feedAllAnimals();
             }      // 모든 동물에 사료 주기
             case 3 -> {
+                System.out.println("선택 : 사육장 청소/방문\n");
+                cleanAndVisitAnimal();
+            }
+            case 4 -> {
                 System.out.println(">>> 수확하기\n");
                 interactWithAnimals();
             } // 수확 후 Product/Finance에 반영
-            case 4 -> {
+            case 5 -> {
                 System.out.println(">>> 재고 확인\n");
                 farm.getProductInventory().displayAllProducts();
-            }  // 재고 확인
-            case 5 -> {
+            }
+            case 6 -> {
+                System.out.println(">>> 교배하기\n");
+                breedAnimals();
+            }
+            case 7 -> {
                 System.out.println(">>> 메인화면으로 돌아가기\n");
                 state = MenuState.MAIN;
             }// 메인화면으로 돌아가기
@@ -167,8 +184,8 @@ public class MenuController {
             animal.setInteractedToday(false);
             //오늘 사료 급여 여부를 false로 변경
             animal.setFedToday(false);
-
-            // 🐔 닭 청결도 로직 제거됨.
+            //오늘 사육장 청소 여부를 false로 변경
+            animal.setCleanedToday(false);
         }
         System.out.println("\n=== 하루가 지나" + day + "일차가 밝았습니다. ===\n");
         state = MenuState.MAIN;
@@ -204,7 +221,7 @@ public class MenuController {
     // 헬퍼 메서드: 사용자에게 사료 종류를 선택하게 함
     private PreferredFeed selectFeedType() {
         while (true) {
-            System.out.println("======= 어떤 사료를 주시겠습니까? =======");
+            System.out.println("======= 어떤 동물이 선호하는 사료를 주시겠습니까? =======");
 
             // PreferredFeed Enum의 값들을 출력
             PreferredFeed[] feeds = PreferredFeed.values();
@@ -251,18 +268,155 @@ public class MenuController {
             } else if (animal instanceof Deer deer) {
                 deerService.interactCutAntlers(deer, inventory);
             }
-            /* else if (animal instanceof Unicorn unicorn) {
-                unicornService.interactSomething(unicorn, inventory);
-            } */ // 유니콘
-
-            // 2. 닭을 포함한 모든 동물에 대한 방문 상호작용 (스트레스 감소)
-            // isReadyForInteraction은 상호작용했는지 여부와 HP MAX 여부를 체크함
-            if (animal.isReadyForInteraction()) {
-                animal.cleanAndVisit(); // 방문 및 돌보기로 스트레스 감소
-            }
         }
         System.out.println();
     }
+
+    // 사육장 청소/방문
+    private void cleanAndVisitAnimal() {
+        var animals = farm.getAnimals();
+
+        if (animals.isEmpty()) {
+            System.out.println("농장에 동물이 없습니다.\n");
+            return;
+        }
+
+        System.out.println("======= 청소/방문할 동물 선택 =======");
+        for (int i = 0; i < animals.size(); i++) {
+            Livestock a = animals.get(i);
+            System.out.printf("%d) [%s] %s (스트레스:%d/%d)%n",
+                    i + 1,
+                    a.getClass().getSimpleName(),
+                    a.getName(),
+                    a.getStressIndex(),
+                    Livestock.MAX_STRESS_INDEX
+            );
+        }
+        System.out.println((animals.size() + 1) + ") 돌아가기");
+        System.out.print("선택 : ");
+
+        int choice = getChoice();
+        int idx = choice - 1;
+
+        if (choice == animals.size() + 1) {
+            System.out.println("취소\n");
+            return;
+        }
+        if (idx < 0 || idx >= animals.size()) {
+            System.out.println("잘못된 입력입니다.\n");
+            return;
+        }
+
+        Livestock target = animals.get(idx);
+
+        // 하루 1회 제한(이미 청소/방문 했으면 막기)
+        if (target.getCleanedToday()) {
+            System.out.println("오늘은 이미 청소를 했습니다.\n");
+            return;
+        }
+        target.cleanAndVisit();
+
+
+        // 여기서 실제 호출
+        target.cleanAndVisit();
+        System.out.println();
+    }
+
+
+    // 교배 로직
+    private void breedAnimals() {
+        List<Livestock> animals = farm.getAnimals();
+
+        if (animals.size() < 2) {
+            System.out.println("교배하려면 동물이 최소 2마리 있어야 합니다.");
+            return;
+        }
+        if (animals.size() >= farm.getMaxCapacity()) {
+            System.out.println("빈 사육장이 없습니다. 사육장을 확장한 뒤 교배하세요.");
+            return;
+        }
+
+        // 1) 전체 목록 출력
+        System.out.println("======= 보유 동물 목록 =======");
+        for (int i = 0; i < animals.size(); i++) {
+            Livestock a = animals.get(i);
+            System.out.printf("%d) [%s] %s (공통:%s, 종:%s)%n",
+                    i + 1,
+                    a.getClass().getSimpleName(),
+                    a.getName(),
+                    a.getCommonTrait() == null ? "없음" : a.getCommonTrait().id(),
+                    a.getSpeciesTrait() == null ? "없음" : a.getSpeciesTrait().id()
+            );
+        }
+
+        // 2) 첫 번째 부모 선택
+        System.out.print("첫 번째 부모 번호: ");
+        int idx1 = getChoice() - 1;
+        if (idx1 < 0 || idx1 >= animals.size()) {
+            System.out.println("잘못된 번호입니다.");
+            return;
+        }
+        Livestock p1 = animals.get(idx1);
+
+        // 3) 두 번째 부모 후보(같은 종)만 보여주기
+        System.out.println("\n======= 같은 종 후보 =======");
+        boolean hasCandidate = false;
+        for (int i = 0; i < animals.size(); i++) {
+            if (i == idx1) continue;
+            Livestock a = animals.get(i);
+            if (a.getClass().equals(p1.getClass())) {
+                hasCandidate = true;
+                System.out.printf("%d) [%s] %s (공통:%s, 종:%s)%n",
+                        i + 1,
+                        a.getClass().getSimpleName(),
+                        a.getName(),
+                        a.getCommonTrait() == null ? "없음" : a.getCommonTrait().id(),
+                        a.getSpeciesTrait() == null ? "없음" : a.getSpeciesTrait().id()
+                );
+            }
+        }
+        if (!hasCandidate) {
+            System.out.println("같은 종의 다른 동물이 없습니다.");
+            return;
+        }
+
+        System.out.print("두 번째 부모 번호: ");
+        int idx2 = getChoice() - 1;
+        if (idx2 < 0 || idx2 >= animals.size() || idx2 == idx1) {
+            System.out.println("잘못된 번호입니다.");
+            return;
+        }
+        Livestock p2 = animals.get(idx2);
+
+        if (!p1.getClass().equals(p2.getClass())) {
+            System.out.println("같은 종끼리만 교배할 수 있습니다.");
+            return;
+        }
+
+        // 4) 교배 실행
+        Livestock child;
+        try {
+            child = breedingService.breed(p1, p2);
+        } catch (Exception e) {
+            System.out.println("교배 실패: " + e.getMessage());
+            return;
+        }
+
+        // 5) 농장에 추가
+        boolean added = farm.addAnimal(child);
+        if (!added) {
+            System.out.println("사육장 수용량 때문에 자식을 추가하지 못했습니다.");
+            return;
+        }
+
+        System.out.printf("🎉 교배 성공! [%s] %s 탄생! (공통:%s, 종:%s)%n",
+                child.getClass().getSimpleName(),
+                child.getName(),
+                child.getCommonTrait() == null ? "없음" : child.getCommonTrait().id(),
+                child.getSpeciesTrait() == null ? "없음" : child.getSpeciesTrait().id()
+        );
+    }
+
 
     // 구매 화면
     private void showBuyMenu() {
@@ -270,9 +424,8 @@ public class MenuController {
             System.out.println("""
                 ======== 구매하기 ========
                 1. 동물 구매
-                2. 사료 구매
-                3. 사육장 확장
-                4. 돌아가기
+                2. 사육장 확장
+                3. 돌아가기
                 """);
             System.out.print("선택 : ");
             int choice = getChoice();
@@ -283,14 +436,10 @@ public class MenuController {
                     buyAnimal();
                 }       // 동물 관련
                 case 2 -> {
-                    System.out.println(">>> 사료 구매\n");
-                    buyFeed();
-                }         // 사료 관련
-                case 3 -> {
                     System.out.println(">>> 사육장 확장\n");
                     buyEnclosure();
                 }    // 사육장 확장
-                case 4 -> {
+                case 3 -> {
                     System.out.println("상점 메인으로 돌아갑니다.\n");
                     return;                 // 구매 화면으로 돌아감
                 }
@@ -370,6 +519,10 @@ public class MenuController {
                 return;
             }
         }
+
+        assignCommonTrait(newAnimal);
+        assignSpeciesTrait(newAnimal);
+
         // addAnimal() 써서 동물 추가
         boolean added = farm.addAnimal(newAnimal);
 
@@ -379,13 +532,44 @@ public class MenuController {
             finance.addMoney(price);
         }
     }
+    // 공통특성을 부여하는 메서드
+    private void assignCommonTrait(Livestock animal) {
+        CommonTrait[] traits = CommonTrait.values(); // NORMAL, LIVELY, STRESSFULL
+        int idx = java.util.concurrent.ThreadLocalRandom.current().nextInt(traits.length);
+        animal.setCommonTrait(traits[idx]);
+    }
 
+    private void assignSpeciesTrait(Livestock animal) {
+        if (!TraitRng.chance(30)) return;
 
-    // 사료 구매
-    private void buyFeed() {
-        System.out.println("[사료 구매] 기능은 아직 구현 중입니다.");
-        // TODO: 동물별 사료 종류를 다르게 할지, 한 번에 사지는 사료 개수를 정할지 정하고 만들어야할듯
-        //  로직: 사료 이름 입력 → 가격 확인 → 자금 확인 → 재고/인벤토리 증가
+        if (animal instanceof Unicorn) {
+            UnicornTrait[] traits = UnicornTrait.values();
+            animal.setSpeciesTrait(traits[java.util.concurrent.ThreadLocalRandom.current().nextInt(traits.length)]);
+            return;
+        }
+
+        if (animal instanceof Chicken) {
+            ChickenTrait[] traits = ChickenTrait.values();
+            animal.setSpeciesTrait(traits[java.util.concurrent.ThreadLocalRandom.current().nextInt(traits.length)]);
+            return;
+        }
+
+        if (animal instanceof Sheep) {
+            SheepTrait[] traits = SheepTrait.values();
+            animal.setSpeciesTrait(traits[java.util.concurrent.ThreadLocalRandom.current().nextInt(traits.length)]);
+            return;
+        }
+
+        if (animal instanceof Cow) {
+            CowTrait[] traits = CowTrait.values();
+            animal.setSpeciesTrait(traits[java.util.concurrent.ThreadLocalRandom.current().nextInt(traits.length)]);
+            return;
+        }
+
+        if (animal instanceof Deer) {
+            DeerTrait[] traits = DeerTrait.values();
+            animal.setSpeciesTrait(traits[java.util.concurrent.ThreadLocalRandom.current().nextInt(traits.length)]);
+        }
     }
 
     // 사육장 확장

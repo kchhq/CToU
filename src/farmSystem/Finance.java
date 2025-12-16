@@ -40,7 +40,7 @@ public class Finance {
      */
     public boolean subtractMoney(int amount) {
         if (amount <= 0) {
-            System.out.println("❌ 0 이하의 금액은 차감할 수 없습니다.");
+            System.out.println("0 이하의 금액은 차감할 수 없습니다.");
             return false;
         }
 
@@ -49,7 +49,7 @@ public class Finance {
             System.out.println("💸 " + amount + "원이 차감되었습니다. (현재 잔액: " + this.money + "원)");
             return true;
         } else {
-            System.out.println("❌ 잔액 부족! " + amount + "원을 차감할 수 없습니다. (현재 잔액: " + this.money + "원)");
+            System.out.println("잔액 부족! " + amount + "원을 차감할 수 없습니다. (현재 잔액: " + this.money + "원)");
             return false;
         }
     }

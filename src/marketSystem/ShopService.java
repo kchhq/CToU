@@ -71,6 +71,10 @@ public class ShopService {
         sMap.put("Egg", 3);
         sMap.put("Milk", 5);
         sMap.put("Antler", 120);
+
+        sMap.put("GoldenWool", 30);
+        sMap.put("GoldenEgg", 6);
+        sMap.put("GoldenAntler", 240);
         SELL_PRICES = Collections.unmodifiableMap(sMap);
     }
 
@@ -99,7 +103,7 @@ public class ShopService {
             // 사육장 확장에 대한 특별 체크 로직
             if (itemName.equals("사육장 확장")) {
                 if (currentLevel >= MAX_ENCLOSURE_LEVEL) {
-                    System.out.println("❌ 사육장이 이미 최대 레벨(" + MAX_ENCLOSURE_LEVEL + ")입니다. 더 이상 확장할 수 없습니다.");
+                    System.out.println("사육장이 이미 최대 레벨(" + MAX_ENCLOSURE_LEVEL + ")입니다. 더 이상 확장할 수 없습니다.");
                     return new ItemPurchaseInfo(ItemType.UNPURCHASABLE);
                 }
             }
@@ -107,7 +111,7 @@ public class ShopService {
         }
 
         // 4. 상품을 찾지 못한 경우
-        System.out.println("❌ 상품 [" + itemName + "]을(를) 찾을 수 없습니다.");
+        System.out.println("상품 [" + itemName + "]을(를) 찾을 수 없습니다.");
         return new ItemPurchaseInfo(ItemType.NOT_FOUND);
     }
 
@@ -145,6 +149,18 @@ public class ShopService {
                     count = product.getAntlerCount();
                     if (count > 0) product.removeAntlers(count);
                     break;
+                case "GoldenWool":
+                    count = product.getGoldenWoolCount();
+                    if (count > 0) product.removeGoldenWool(count);
+                    break;
+                case "GoldenEgg":
+                    count = product.getGoldenEggCount();
+                    if (count > 0) product.removeGoldenEggs(count);
+                    break;
+                case "GoldenAntler":
+                    count = product.getGoldenAntlerCount();
+                    if (count > 0) product.removeGoldenAntlers(count);
+                    break;
             }
 
             if (count > 0) {
@@ -152,7 +168,7 @@ public class ShopService {
                 int revenue = count * price;
 
                 totalRevenue += revenue;
-                System.out.println("✅ " + item + " " + count + "개 판매 완료. (+" + revenue + "원)");
+                System.out.println(item + " " + count + "개 판매 완료. (+" + revenue + "원)");
             }
         }
 

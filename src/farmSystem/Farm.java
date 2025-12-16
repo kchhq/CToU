@@ -40,7 +40,7 @@ public class Farm {
             System.out.println("새로운 가축 [" + animal.getName() + "]가 사육장에 추가되었습니다. (현재 " + this.animals.size() + "/" + this.maxCapacity + "마리)");
             return true;
         } else {
-            System.out.println("❌ 사육장 수용량 초과! [" + animal.getName() + "]를 추가할 수 없습니다. (최대: " + this.maxCapacity + "마리)");
+            System.out.println("사육장 수용량 초과! [" + animal.getName() + "]를 추가할 수 없습니다. (최대: " + this.maxCapacity + "마리)");
             return false;
         }
     }
@@ -59,7 +59,7 @@ public class Farm {
             System.out.println("✨ 사육장이 레벨 " + this.enclosureLevel + "로 확장되었습니다! (최대 수용량: " + this.maxCapacity + "마리)");
             return true;
         } else {
-            System.out.println("🚫 사육장은 최대 레벨 (" + MAX_ENCLOSURE_LEVEL + ")입니다. 더 이상 확장할 수 없습니다.");
+            System.out.println("사육장은 최대 레벨 (" + MAX_ENCLOSURE_LEVEL + ")입니다. 더 이상 확장할 수 없습니다.");
             return false;
         }
     }
@@ -93,7 +93,7 @@ public class Farm {
     // ----------------------------------------------------
 
     public void displayAllAnimalsStatus() {
-        System.out.println("\n--- 🟢 현재 사육장 가축 목록 (" + animals.size() + "/" + this.maxCapacity + "마리) ---");
+        System.out.println("\n--- 현재 사육장 가축 목록 (" + animals.size() + "/" + this.maxCapacity + "마리) ---");
 
         if (animals.isEmpty()) {
             System.out.println("사육장이 비어있습니다.");
