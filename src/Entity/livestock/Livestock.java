@@ -72,7 +72,17 @@ public abstract class Livestock {
     public void displayStatus() {
         System.out.println("[" + type + "] " + name
                 + ", hp=" + hp + "/" + MAX_HP
-                + ", 스트레스=" + stressIndex + "/" + MAX_STRESS_INDEX); // 🐂 스트레스 지수 표시 추가
+                + ", 스트레스=" + stressIndex + "/" + MAX_STRESS_INDEX);
+
+        // 농장 상태 확인 시 동물의 보유 특성과 설명 나오게 변경
+        if (commonTrait != null) {
+            System.out.println("  공통 특성: " + commonTrait.displayName()
+                    + " - " + commonTrait.description());
+        }
+        if (speciesTrait != null) {
+            System.out.println("  종 특성: " + speciesTrait.displayName()
+                    + " - " + speciesTrait.description());
+        }
     }
 
 

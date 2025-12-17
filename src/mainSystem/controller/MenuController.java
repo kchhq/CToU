@@ -344,8 +344,8 @@ public class MenuController {
                     i + 1,
                     a.getClass().getSimpleName(),
                     a.getName(),
-                    a.getCommonTrait() == null ? "없음" : a.getCommonTrait().id(),
-                    a.getSpeciesTrait() == null ? "없음" : a.getSpeciesTrait().id()
+                    a.getCommonTrait() == null ? "없음" : a.getCommonTrait().displayName(),
+                    a.getSpeciesTrait() == null ? "없음" : a.getSpeciesTrait().displayName()
             );
         }
 
@@ -370,8 +370,8 @@ public class MenuController {
                         i + 1,
                         a.getClass().getSimpleName(),
                         a.getName(),
-                        a.getCommonTrait() == null ? "없음" : a.getCommonTrait().id(),
-                        a.getSpeciesTrait() == null ? "없음" : a.getSpeciesTrait().id()
+                        a.getCommonTrait() == null ? "없음" : a.getCommonTrait().displayName(),
+                        a.getSpeciesTrait() == null ? "없음" : a.getSpeciesTrait().displayName()
                 );
             }
         }
@@ -412,8 +412,8 @@ public class MenuController {
         System.out.printf("🎉 교배 성공! [%s] %s 탄생! (공통:%s, 종:%s)%n",
                 child.getClass().getSimpleName(),
                 child.getName(),
-                child.getCommonTrait() == null ? "없음" : child.getCommonTrait().id(),
-                child.getSpeciesTrait() == null ? "없음" : child.getSpeciesTrait().id()
+                child.getCommonTrait() == null ? "없음" : child.getCommonTrait().displayName(),
+                child.getSpeciesTrait() == null ? "없음" : child.getSpeciesTrait().displayName()
         );
     }
 

@@ -9,6 +9,7 @@ public enum CommonTrait implements Trait {
         public String id() {
             return "NORMAL";
         }
+        @Override public String displayName() { return "평범함"; }
 
         @Override
         public String description() {
@@ -20,6 +21,8 @@ public enum CommonTrait implements Trait {
     // LIVELY : 상호작용 시 40% 확률로 HP가 감소하지 않음
     LIVELY {
         @Override public String id() { return "LIVELY"; }
+
+        @Override public String displayName() { return "활발함"; }
 
         @Override
         public String description() {
@@ -37,10 +40,13 @@ public enum CommonTrait implements Trait {
     STRESSFULL {
         @Override public String id() { return "STRESSFULL"; }
 
+
         @Override
         public String description() {
             return "예민한 동물입니다. 상호작용 시 큰 스트레스를 받을 수 있습니다.";
         }
+
+        @Override public String displayName() { return "예민함"; }
 
         @Override public void onBeforeInteraction(TraitEffectContext ctx) {
             // 20% 확률로 HP 10 강제

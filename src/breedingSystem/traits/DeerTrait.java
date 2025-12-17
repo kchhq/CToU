@@ -1,12 +1,29 @@
 package breedingSystem.traits;
 
 public enum DeerTrait implements Trait {
+    DEER_NORMAL {
+        @Override
+        public String id() {
+            return "NORMAL";
+        }
+
+        @Override public String displayName() { return "평범함"; }
+
+        @Override
+        public String description() {
+            return "평범한 동물입니다.";
+        }
+        // 효과 없음
+    },
+
 
     GOLDEN_ANTLER {
         @Override
         public String id() {
             return "GOLDEN_ANTLER";
         }
+
+        @Override public String displayName() { return "황금뿔"; }
 
         @Override
         public String description() {
@@ -26,6 +43,8 @@ public enum DeerTrait implements Trait {
         public String id() {
             return "BREAKAWAY";
         }
+
+        @Override public String displayName() { return "뿔갈이"; }
 
         @Override
         public String description() {
